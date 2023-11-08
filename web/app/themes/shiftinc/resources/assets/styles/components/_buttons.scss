@@ -1,4 +1,5 @@
 .btn {
+  border: none;
   border-radius: 3rem;
   padding: 18px 35px;
   text-decoration: none;
@@ -8,15 +9,14 @@
   @extend .text-center;
   @extend .transition;
   @extend .fw-500;
+  @extend .fs-15;
   @extend .lh-1;
   @extend .ls-1;
 
   &-primary {
-    @extend .fs-15;
     @extend .bg-white;
     @extend .text-white;
-    background: linear-gradient(149deg, $blue 5.25%,#82e8ff 130.25%);
-    border: none;
+    background: linear-gradient(149deg, $blue 5.25%, #82e8ff 130.25%);
 
     &:hover {
       box-shadow: 0 0.375rem 1.5rem -0.25rem rgba($black, 0.15) !important;
@@ -24,14 +24,25 @@
   }
 
   &-white {
-    @extend .fs-15;
     @extend .bg-white;
     @extend .text-secondary;
 
     &:hover {
       @extend .text-white;
-      background: linear-gradient(149deg, $blue 5.25%,#82e8ff 130.25%);
+      background: linear-gradient(149deg, $blue 5.25%, #82e8ff 130.25%);
       box-shadow: 0 0.375rem 1.5rem -0.25rem rgba($black, 0.15) !important;
+    }
+  }
+
+  &-hover {
+    @extend .text-blue;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 0 2px $blue;
+
+    &:hover {
+      @extend .text-white;
+      background: linear-gradient(149deg, $blue 5.25%, #82e8ff 130.25%);
+      box-shadow: 0 0.375rem 1.5rem -0.25rem rgba($black, 0.25) !important;
     }
   }
 

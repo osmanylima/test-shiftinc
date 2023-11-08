@@ -2,7 +2,10 @@
   padding-top: 130px;
   padding-bottom: 50px;
   background: linear-gradient(95deg, $primary, $secondary, $terciary);
-  
+  background: linear-gradient(95deg, $primary, $secondary, $terciary);
+  @extend .position-relative;
+  @extend .overflow-hidden;
+
   @include media-breakpoint-up(md) {
     padding-top: 160px;
     min-height: 100vh;
@@ -14,8 +17,10 @@
     @extend .w-100;
     @extend .h-100;
     @extend .start-0;
-    @extend .position-fixed;
+    @extend .position-absolute;
     background-image: url('../images/bg-pattern.png');
+    background-repeat: repeat;
+    display: block;
     z-index: 1;
   }
 
@@ -40,5 +45,11 @@
   h4 {
     @extend .fs-18;
     @extend .lh-sm;
+  }
+}
+
+.bg-blue-light {
+  article:nth-child(1) {
+    @extend .order-md-2;
   }
 }
