@@ -90,3 +90,9 @@ add_filter('comments_template', function ($comments_template) {
     return $comments_template;
 }, 100);
 
+add_filter('theme_file_path', function($path, $file) {
+    if($file === 'theme.json') {
+        return false;
+    }
+    return $path;
+}, 0, 2);

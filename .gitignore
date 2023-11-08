@@ -54,3 +54,4 @@ wp-cli.local.yml
 !web/app/themes/shiftinc/
 web/app/themes/shiftinc/.cache-loader
 web/app/themes/shiftinc/node_modules
+web/app/plugins/advanced-custom-fields-pro

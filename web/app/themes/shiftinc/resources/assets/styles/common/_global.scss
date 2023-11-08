@@ -12,7 +12,6 @@
 html,
 body {
   scroll-behavior: smooth;
-  overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   min-height: 100%;
@@ -31,8 +30,8 @@ a {
 }
 
 p {
-  font-weight: 400;
-  font-size: 16px;
+  @extend .fw-300;
+  @extend .fs-14;
   line-height: 24px;
 
   &:last-child {
@@ -40,11 +39,11 @@ p {
   }
 
   strong {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   small {
-    font-size: 12px;
+    @extend .fs-12;
   }
 }
 
@@ -55,8 +54,23 @@ h4,
 h5,
 h6 {
   line-height: 1;
-  letter-spacing: -1px;
   margin-bottom: 0;
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 48px;
+  @extend .fw-600;
+
+  @include media-breakpoint-down(lg) {
+    font-size: 28px;
+    line-height: 40px;
+  }
+
+  @include media-breakpoint-down(md) {
+    font-size: 24px;
+    line-height: 32px;
+  }
 }
 
 h2 {
@@ -79,15 +93,12 @@ h3 {
   font-size: 32px;
   line-height: 32px;
   font-weight: 400;
-  font-family: $font-family-inter;
-  @extend .ls-0;
 }
 
 h4 {
   font-size: 24px;
-  line-height: 36px;
-  font-weight: 600;
-  font-family: $font-family-inter;
+  line-height: 18px;
+  @extend .fw-300;
 }
 
 h6 {

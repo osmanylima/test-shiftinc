@@ -1,9 +1,39 @@
 .btn {
-  border-radius: 100px !important;
-  padding: 20px 30px;
-  line-height: 1.1;
+  border-radius: 3rem;
+  padding: 18px 35px;
   text-decoration: none;
   text-transform: uppercase;
+  max-width: fit-content;
+  @extend .text-uppercase;
+  @extend .text-center;
+  @extend .transition;
+  @extend .fw-500;
+  @extend .lh-1;
+  @extend .ls-1;
+
+  &-primary {
+    @extend .fs-15;
+    @extend .bg-white;
+    @extend .text-white;
+    background: linear-gradient(149deg, $blue 5.25%,#82e8ff 130.25%);
+    border: none;
+
+    &:hover {
+      box-shadow: 0 0.375rem 1.5rem -0.25rem rgba($black, 0.15) !important;
+    }
+  }
+
+  &-white {
+    @extend .fs-15;
+    @extend .bg-white;
+    @extend .text-secondary;
+
+    &:hover {
+      @extend .text-white;
+      background: linear-gradient(149deg, $blue 5.25%,#82e8ff 130.25%);
+      box-shadow: 0 0.375rem 1.5rem -0.25rem rgba($black, 0.15) !important;
+    }
+  }
 
   &:focus,
   &.focus,

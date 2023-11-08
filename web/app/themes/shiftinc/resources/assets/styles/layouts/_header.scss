@@ -4,17 +4,45 @@
 }
 
 .banner .nav a {
-  @extend .transition;
-  @extend .fw-600;
   @extend .lh-1;
-  color: $white;
-  position: relative;
-
+  @extend .fw-600;
+  @extend .text-white;
+  @extend .transition;
+  @extend .position-relative;
+  
   &:hover {
-    color: $white;
+    @extend .text-white;
+  }
+  
+  &:last-child {
+    @extend .btn;
+    @extend .btn-primary;
   }
 }
 
 .banner {
-  position: relative;
+  z-index: 2;
+  @extend .top-0;
+  @extend .w-100;
+  @extend .start-0;
+  @extend .transition;
+  @extend .position-absolute;
+
+  .brand img {
+    max-width: 125px;
+    filter: brightness(0) invert(1);
+
+    @include media-breakpoint-up(lg) {
+      max-width: 155px;
+    }
+  }
+
+  .container-lg {
+    min-height: 0;
+    @extend .pt-3;
+    @extend .pt-md-4;
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-between;
+  }
 }
