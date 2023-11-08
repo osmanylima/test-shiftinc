@@ -8,5 +8,6 @@
 @include('partials.components.calendario')
 @include('partials.components.relatorios')
 @include('partials.components.concorrentes')
+@include('partials.components.newsletter')
 
 @endsection

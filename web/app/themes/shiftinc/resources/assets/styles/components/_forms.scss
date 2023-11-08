@@ -1,16 +1,38 @@
 form {
-  .form-control {
-    border-radius: 100px;
-    border: 1px solid rgba($secondary, 0.2);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    text-align: center;
-    padding: 20px 0;
-    font-size: 12px;
-    line-height: 1.5;
-  }
+  .form-group {
+    @extend .position-relative;
 
-  button {
+    .svg,
+    svg {
+      @extend .position-absolute;
+      top: 50%;
+      left: 15px;
+      z-index: 10;
+      width: 24px;
+      height: 24px;
+      transform: translateY(-50%);
+    }
+
+    .form-control {
+      border: none;
+      border-radius: 3rem;
+      padding: 15px 25px 15px 50px;
+      max-width: initial;
+      text-decoration: none;
+      text-transform: initial !important;
+      color: #979797;
+      @extend .transition;
+      @extend .text-start;
+      @extend .fw-400;
+      @extend .fs-14;
+      @extend .lh-1;
+      @extend .w-100;
+      @extend .bg-white;
+    }
+  }
+  
+  button[type="button"] {
+    max-width: initial;
     line-height: 1.5;
     width: 100%;
   }

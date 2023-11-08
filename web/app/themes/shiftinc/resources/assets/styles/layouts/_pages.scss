@@ -2,7 +2,6 @@
   padding-top: 130px;
   padding-bottom: 50px;
   background: linear-gradient(95deg, $primary, $secondary, $terciary);
-  background: linear-gradient(95deg, $primary, $secondary, $terciary);
   @extend .position-relative;
   @extend .overflow-hidden;
 
@@ -51,5 +50,45 @@
 .bg-blue-light {
   article:nth-child(1) {
     @extend .order-md-2;
+  }
+}
+
+#newsletter {
+  background: linear-gradient(95deg, $primary, $secondary, $terciary);
+  @extend .position-relative;
+
+  &:before {
+    content: "";
+    @extend .top-0;
+    @extend .w-100;
+    @extend .h-100;
+    @extend .start-0;
+    @extend .position-absolute;
+    background-image: url('../images/bg-pattern.png');
+    background-repeat: repeat;
+    display: block;
+    z-index: 1;
+  }
+
+  > .container-lg {
+    @extend .position-relative;
+    z-index: 1;
+  }
+
+  p,
+  h1,
+  h2 {
+    @extend .text-center;
+    @extend .text-white;
+    @extend .lh-sm;
+    font-weight: 400 !important;
+  }
+  
+  p {
+    font-weight: 300 !important;
+  }
+
+  h2 {
+    @extend .h1;
   }
 }
