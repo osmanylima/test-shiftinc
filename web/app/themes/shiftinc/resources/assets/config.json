@@ -8,7 +8,7 @@
       "./scripts/customizer.js"
     ]
   },
-  "publicPath": "/app/themes/shiftinc",
+  "publicPath": "/clientes/shiftinc/wp-content/themes/shiftinc",
   "devUrl": "http://shiftinc.local",
   "proxyUrl": "http://localhost:3000",
   "cacheBusting": "[name]_[hash:8]",

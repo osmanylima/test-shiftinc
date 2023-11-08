@@ -15,7 +15,7 @@
           <h1>{{ get_field('titulo_hero', $page_home) }}</h1>
         </div>
 
-        <h4>{{ get_field('subtitulo_hero', $page_home) }}​</h4>
+        <h2 class="h4">{{ get_field('subtitulo_hero', $page_home) }}​</h2>
 
         <?php 
           $cta = get_field('cta_hero');

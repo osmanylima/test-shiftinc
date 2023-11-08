@@ -33,7 +33,7 @@
           <a href="{{ $link_url }}" target="{{ $link_target }}" class="btn btn-hover mx-auto mx-md-0">{{ $link_title }}</a>
         <?php endif; ?>
 
-        <p><small>{{ get_sub_field('descricao_card') }}</small></p>
+        <p><small>{!! get_sub_field('descricao_card') !!}</small></p>
       </article>
     </div>
   </div>

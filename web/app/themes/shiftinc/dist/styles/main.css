@@ -9268,8 +9268,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(/app/themes/shiftinc/dist/fonts/fa-regular-400.eot);
-  src: url(/app/themes/shiftinc/dist/fonts/fa-regular-400.eot?#iefix) format("embedded-opentype"), url(/app/themes/shiftinc/dist/fonts/fa-regular-400.woff2) format("woff2"), url(/app/themes/shiftinc/dist/fonts/fa-regular-400.woff) format("woff"), url(/app/themes/shiftinc/dist/fonts/fa-regular-400.ttf) format("truetype"), url(/app/themes/shiftinc/dist/fonts/fa-regular-400.svg#fontawesome) format("svg");
+  src: url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-regular-400.eot);
+  src: url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-regular-400.eot?#iefix) format("embedded-opentype"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-regular-400.woff2) format("woff2"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-regular-400.woff) format("woff"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-regular-400.ttf) format("truetype"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-regular-400.svg#fontawesome) format("svg");
 }
 
 /* line 20, node_modules/@fortawesome/fontawesome-free/scss/regular.scss */
@@ -9289,8 +9289,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url(/app/themes/shiftinc/dist/fonts/fa-solid-900.eot);
-  src: url(/app/themes/shiftinc/dist/fonts/fa-solid-900.eot?#iefix) format("embedded-opentype"), url(/app/themes/shiftinc/dist/fonts/fa-solid-900.woff2) format("woff2"), url(/app/themes/shiftinc/dist/fonts/fa-solid-900.woff) format("woff"), url(/app/themes/shiftinc/dist/fonts/fa-solid-900.ttf) format("truetype"), url(/app/themes/shiftinc/dist/fonts/fa-solid-900.svg#fontawesome) format("svg");
+  src: url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-solid-900.eot);
+  src: url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-solid-900.eot?#iefix) format("embedded-opentype"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-solid-900.woff2) format("woff2"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-solid-900.woff) format("woff"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-solid-900.ttf) format("truetype"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-solid-900.svg#fontawesome) format("svg");
 }
 
 /* line 20, node_modules/@fortawesome/fontawesome-free/scss/solid.scss */
@@ -9311,8 +9311,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(/app/themes/shiftinc/dist/fonts/fa-brands-400.eot);
-  src: url(/app/themes/shiftinc/dist/fonts/fa-brands-400.eot?#iefix) format("embedded-opentype"), url(/app/themes/shiftinc/dist/fonts/fa-brands-400.woff2) format("woff2"), url(/app/themes/shiftinc/dist/fonts/fa-brands-400.woff) format("woff"), url(/app/themes/shiftinc/dist/fonts/fa-brands-400.ttf) format("truetype"), url(/app/themes/shiftinc/dist/fonts/fa-brands-400.svg#fontawesome) format("svg");
+  src: url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-brands-400.eot);
+  src: url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-brands-400.eot?#iefix) format("embedded-opentype"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-brands-400.woff2) format("woff2"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-brands-400.woff) format("woff"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-brands-400.ttf) format("truetype"), url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/fonts/fa-brands-400.svg#fontawesome) format("svg");
 }
 
 /* line 20, node_modules/@fortawesome/fontawesome-free/scss/brands.scss */
@@ -29366,12 +29366,13 @@ h3,
 /* line 99, resources/assets/styles/common/_global.scss */
 
 h4,
+.h4,
 .h4 {
   font-size: 24px;
   line-height: 18px;
 }
 
-/* line 105, resources/assets/styles/common/_global.scss */
+/* line 106, resources/assets/styles/common/_global.scss */
 
 h6,
 .h6 {
@@ -29380,14 +29381,14 @@ h6,
   font-weight: 600;
 }
 
-/* line 111, resources/assets/styles/common/_global.scss */
+/* line 112, resources/assets/styles/common/_global.scss */
 
 .py-50 {
   padding-top: 50px;
   padding-bottom: 50px;
 }
 
-/* line 116, resources/assets/styles/common/_global.scss */
+/* line 117, resources/assets/styles/common/_global.scss */
 
 .py-70 {
   padding-top: 70px;
@@ -29592,7 +29593,7 @@ form button[type="button"] {
 
 #hero:before {
   content: "";
-  background-image: url(/app/themes/shiftinc/dist/images/bg-pattern.png);
+  background-image: url("https://studio084.com.br/clientes/shiftinc/wp-content/themes/shiftinc/dist/images/bg-pattern.png");
   background-repeat: repeat;
   display: block;
   z-index: 1;
@@ -29614,7 +29615,7 @@ form button[type="button"] {
 
 #newsletter:before {
   content: "";
-  background-image: url(/app/themes/shiftinc/dist/images/bg-pattern.png);
+  background-image: url(/clientes/shiftinc/wp-content/themes/shiftinc/dist/images/bg-pattern.png);
   background-repeat: repeat;
   display: block;
   z-index: 1;
