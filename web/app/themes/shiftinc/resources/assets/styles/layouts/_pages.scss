@@ -53,6 +53,10 @@
   }
 }
 
+.list-cards section:nth-child(2n+2) article:nth-child(1) {
+  @extend .order-md-2;
+}
+
 #newsletter {
   background: linear-gradient(95deg, $primary, $secondary, $terciary);
   @extend .position-relative;

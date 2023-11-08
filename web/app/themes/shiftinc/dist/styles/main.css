@@ -24839,7 +24839,8 @@ form .form-group .form-control {
   /* line 64, node_modules/bootstrap/scss/mixins/_utilities.scss */
 
   .order-md-2,
-  .bg-blue-light article:nth-child(1) {
+  .bg-blue-light article:nth-child(1),
+  .list-cards section:nth-child(2n+2) article:nth-child(1) {
     order: 2 !important;
   }
 
@@ -29603,13 +29604,13 @@ form button[type="button"] {
   z-index: 1;
 }
 
-/* line 56, resources/assets/styles/layouts/_pages.scss */
+/* line 60, resources/assets/styles/layouts/_pages.scss */
 
 #newsletter {
   background: linear-gradient(95deg, #d7294e, #f26526, #f9ac00);
 }
 
-/* line 60, resources/assets/styles/layouts/_pages.scss */
+/* line 64, resources/assets/styles/layouts/_pages.scss */
 
 #newsletter:before {
   content: "";
@@ -29619,13 +29620,13 @@ form button[type="button"] {
   z-index: 1;
 }
 
-/* line 73, resources/assets/styles/layouts/_pages.scss */
+/* line 77, resources/assets/styles/layouts/_pages.scss */
 
 #newsletter > .container-lg {
   z-index: 1;
 }
 
-/* line 78, resources/assets/styles/layouts/_pages.scss */
+/* line 82, resources/assets/styles/layouts/_pages.scss */
 
 #newsletter p,
 #newsletter h1,
@@ -29637,7 +29638,7 @@ form button[type="button"] {
   font-weight: 400 !important;
 }
 
-/* line 87, resources/assets/styles/layouts/_pages.scss */
+/* line 91, resources/assets/styles/layouts/_pages.scss */
 
 #newsletter p {
   font-weight: 300 !important;

@@ -121,36 +121,13 @@ function upload_svg_files( $allowed ) {
     return $allowed;
 }
 add_filter( 'upload_mimes', 'upload_svg_files');
-
-
-/**
- * Destinado as configurações gerais,
- * configurações gerenciáveis por usuários (cliente) através da interface construída
- * /admin?m=general-configuration
- */
-if( function_exists('acf_add_options_page') ) {
-    acf_add_options_page(array(
-        'page_title'    => 'Configuração Geral',
-        'menu_title'    => 'Configuração Geral',
-        'menu_slug'     => 'general-configuration',
-        'capability'    => 'edit_posts',
-        'redirect'      => false,
-        'icon_url'      => 'dashicons-admin-links',
-    ));
-  }
-  
-  /**
-   * Destinado as configurações globais do projeto gerenciáveis apenas pelo
-   * painel administrativo do wordpress, apenas para super administradores.
-   */
-  if( function_exists('acf_add_options_page') ) {
-    acf_add_options_page(array(
-        'page_title'    => 'Configuração Global',
-        'menu_title'    => 'Configuração Global',
-        'menu_slug'     => 'global-configuration',
-        'capability'    => 'edit_posts',
-        'redirect'      => false,
-        'icon_url'      => 'dashicons-schedule',
-    ));
-  }
-  
+ 
+add_filter('site_transient_update_plugins', 'ext_core_acf_remove_update_notification');
+// Disable ACF update notifications
+function ext_core_acf_remove_update_notification($value)
+{
+    if ($value->response) {
+        unset($value->response['advanced-custom-fields-pro/acf.php']);
+    }
+    return $value;
+}
