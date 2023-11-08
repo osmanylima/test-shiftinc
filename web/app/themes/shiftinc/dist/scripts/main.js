@@ -132,7 +132,7 @@ var modifierPhases = [beforeRead, read, afterRead, beforeMain, main, afterMain, 
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isElement; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isHTMLElement; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return isShadowRoot; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(2);
 
 
 function isElement(node) {
@@ -162,11 +162,18 @@ function isShadowRoot(node) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getBasePlacement;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enums_js__ = __webpack_require__(0);
+/* harmony export (immutable) */ __webpack_exports__["a"] = getWindow;
+function getWindow(node) {
+  if (node == null) {
+    return window;
+  }
 
-function getBasePlacement(placement) {
-  return placement.split('-')[0];
+  if (node.toString() !== '[object Window]') {
+    var ownerDocument = node.ownerDocument;
+    return ownerDocument ? ownerDocument.defaultView || window : window;
+  }
+
+  return node;
 }
 
 /***/ }),
@@ -180,13 +187,11 @@ module.exports = jQuery;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getDocumentElement;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instanceOf_js__ = __webpack_require__(1);
+/* harmony export (immutable) */ __webpack_exports__["a"] = getBasePlacement;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enums_js__ = __webpack_require__(0);
 
-function getDocumentElement(element) {
-  // $FlowFixMe[incompatible-return]: assume body is always available
-  return ((Object(__WEBPACK_IMPORTED_MODULE_0__instanceOf_js__["a" /* isElement */])(element) ? element.ownerDocument : // $FlowFixMe[prop-missing]
-  element.document) || window.document).documentElement;
+function getBasePlacement(placement) {
+  return placement.split('-')[0];
 }
 
 /***/ }),
@@ -194,18 +199,13 @@ function getDocumentElement(element) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getWindow;
-function getWindow(node) {
-  if (node == null) {
-    return window;
-  }
+/* harmony export (immutable) */ __webpack_exports__["a"] = getDocumentElement;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instanceOf_js__ = __webpack_require__(1);
 
-  if (node.toString() !== '[object Window]') {
-    var ownerDocument = node.ownerDocument;
-    return ownerDocument ? ownerDocument.defaultView || window : window;
-  }
-
-  return node;
+function getDocumentElement(element) {
+  // $FlowFixMe[incompatible-return]: assume body is always available
+  return ((Object(__WEBPACK_IMPORTED_MODULE_0__instanceOf_js__["a" /* isElement */])(element) ? element.ownerDocument : // $FlowFixMe[prop-missing]
+  element.document) || window.document).documentElement;
 }
 
 /***/ }),
@@ -236,7 +236,7 @@ var round = Math.round;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getComputedStyle;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(2);
 
 function getComputedStyle(element) {
   return Object(__WEBPACK_IMPORTED_MODULE_0__getWindow_js__["a" /* default */])(element).getComputedStyle(element);
@@ -247,8 +247,53 @@ function getComputedStyle(element) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getBoundingClientRect;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instanceOf_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_math_js__ = __webpack_require__(7);
+
+
+function getBoundingClientRect(element, includeScale) {
+  if (includeScale === void 0) {
+    includeScale = false;
+  }
+
+  var rect = element.getBoundingClientRect();
+  var scaleX = 1;
+  var scaleY = 1;
+
+  if (Object(__WEBPACK_IMPORTED_MODULE_0__instanceOf_js__["b" /* isHTMLElement */])(element) && includeScale) {
+    var offsetHeight = element.offsetHeight;
+    var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
+    // Fallback to 1 in case both values are `0`
+
+    if (offsetWidth > 0) {
+      scaleX = Object(__WEBPACK_IMPORTED_MODULE_1__utils_math_js__["c" /* round */])(rect.width) / offsetWidth || 1;
+    }
+
+    if (offsetHeight > 0) {
+      scaleY = Object(__WEBPACK_IMPORTED_MODULE_1__utils_math_js__["c" /* round */])(rect.height) / offsetHeight || 1;
+    }
+  }
+
+  return {
+    width: rect.width / scaleX,
+    height: rect.height / scaleY,
+    top: rect.top / scaleY,
+    right: rect.right / scaleX,
+    bottom: rect.bottom / scaleY,
+    left: rect.left / scaleX,
+    x: rect.left / scaleX,
+    y: rect.top / scaleY
+  };
+}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getOffsetParent;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getNodeName_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getComputedStyle_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instanceOf_js__ = __webpack_require__(1);
@@ -320,20 +365,30 @@ function getOffsetParent(element) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getVariation;
+function getVariation(placement) {
+  return placement.split('-')[1];
+}
+
+/***/ }),
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = detectOverflow;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom_utils_getClippingRect_js__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getDocumentElement_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_getBoundingClientRect_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__computeOffsets_js__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rectToClientRect_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getDocumentElement_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_getBoundingClientRect_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__computeOffsets_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rectToClientRect_js__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__enums_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__dom_utils_instanceOf_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mergePaddingObject_js__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__expandToHashMap_js__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__mergePaddingObject_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__expandToHashMap_js__ = __webpack_require__(31);
 
 
 
@@ -399,7 +454,7 @@ function detectOverflow(state, options) {
 }
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -589,68 +644,13 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getBoundingClientRect;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instanceOf_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_math_js__ = __webpack_require__(7);
-
-
-function getBoundingClientRect(element, includeScale) {
-  if (includeScale === void 0) {
-    includeScale = false;
-  }
-
-  var rect = element.getBoundingClientRect();
-  var scaleX = 1;
-  var scaleY = 1;
-
-  if (Object(__WEBPACK_IMPORTED_MODULE_0__instanceOf_js__["b" /* isHTMLElement */])(element) && includeScale) {
-    var offsetHeight = element.offsetHeight;
-    var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-    // Fallback to 1 in case both values are `0`
-
-    if (offsetWidth > 0) {
-      scaleX = Object(__WEBPACK_IMPORTED_MODULE_1__utils_math_js__["c" /* round */])(rect.width) / offsetWidth || 1;
-    }
-
-    if (offsetHeight > 0) {
-      scaleY = Object(__WEBPACK_IMPORTED_MODULE_1__utils_math_js__["c" /* round */])(rect.height) / offsetHeight || 1;
-    }
-  }
-
-  return {
-    width: rect.width / scaleX,
-    height: rect.height / scaleY,
-    top: rect.top / scaleY,
-    right: rect.right / scaleX,
-    bottom: rect.bottom / scaleY,
-    left: rect.left / scaleX,
-    x: rect.left / scaleX,
-    y: rect.top / scaleY
-  };
-}
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getVariation;
-function getVariation(placement) {
-  return placement.split('-')[1];
-}
-
-/***/ }),
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getParentNode;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNodeName_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getDocumentElement_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getDocumentElement_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__instanceOf_js__ = __webpack_require__(1);
 
 
@@ -677,8 +677,100 @@ function getParentNode(element) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom_utils_getNodeName_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_instanceOf_js__ = __webpack_require__(1);
+
+ // This modifier takes the styles prepared by the `computeStyles` modifier
+// and applies them to the HTMLElements such as popper and arrow
+
+function applyStyles(_ref) {
+  var state = _ref.state;
+  Object.keys(state.elements).forEach(function (name) {
+    var style = state.styles[name] || {};
+    var attributes = state.attributes[name] || {};
+    var element = state.elements[name]; // arrow is optional + virtual elements
+
+    if (!Object(__WEBPACK_IMPORTED_MODULE_1__dom_utils_instanceOf_js__["b" /* isHTMLElement */])(element) || !Object(__WEBPACK_IMPORTED_MODULE_0__dom_utils_getNodeName_js__["a" /* default */])(element)) {
+      return;
+    } // Flow doesn't support to extend this property, but it's the most
+    // effective way to apply styles to an HTMLElement
+    // $FlowFixMe[cannot-write]
+
+
+    Object.assign(element.style, style);
+    Object.keys(attributes).forEach(function (name) {
+      var value = attributes[name];
+
+      if (value === false) {
+        element.removeAttribute(name);
+      } else {
+        element.setAttribute(name, value === true ? '' : value);
+      }
+    });
+  });
+}
+
+function effect(_ref2) {
+  var state = _ref2.state;
+  var initialStyles = {
+    popper: {
+      position: state.options.strategy,
+      left: '0',
+      top: '0',
+      margin: '0'
+    },
+    arrow: {
+      position: 'absolute'
+    },
+    reference: {}
+  };
+  Object.assign(state.elements.popper.style, initialStyles.popper);
+  state.styles = initialStyles;
+
+  if (state.elements.arrow) {
+    Object.assign(state.elements.arrow.style, initialStyles.arrow);
+  }
+
+  return function () {
+    Object.keys(state.elements).forEach(function (name) {
+      var element = state.elements[name];
+      var attributes = state.attributes[name] || {};
+      var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
+
+      var style = styleProperties.reduce(function (style, property) {
+        style[property] = '';
+        return style;
+      }, {}); // arrow is optional + virtual elements
+
+      if (!Object(__WEBPACK_IMPORTED_MODULE_1__dom_utils_instanceOf_js__["b" /* isHTMLElement */])(element) || !Object(__WEBPACK_IMPORTED_MODULE_0__dom_utils_getNodeName_js__["a" /* default */])(element)) {
+        return;
+      }
+
+      Object.assign(element.style, style);
+      Object.keys(attributes).forEach(function (attribute) {
+        element.removeAttribute(attribute);
+      });
+    });
+  };
+} // eslint-disable-next-line import/no-unused-modules
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  name: 'applyStyles',
+  enabled: true,
+  phase: 'write',
+  fn: applyStyles,
+  effect: effect,
+  requires: ['computeStyles']
+});
+
+/***/ }),
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getLayoutRect;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBoundingClientRect_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBoundingClientRect_js__ = __webpack_require__(9);
  // Returns the layout rect of an element relative to its offsetParent. Layout
 // means it doesn't take into account transforms.
 
@@ -706,14 +798,258 @@ function getLayoutRect(element) {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getMainAxisFromPlacement;
+function getMainAxisFromPlacement(placement) {
+  return ['top', 'bottom'].indexOf(placement) >= 0 ? 'x' : 'y';
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export mapToStyles */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enums_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getOffsetParent_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_getWindow_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dom_utils_getDocumentElement_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dom_utils_getComputedStyle_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_getBasePlacement_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_getVariation_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_math_js__ = __webpack_require__(7);
+
+
+
+
+
+
+
+ // eslint-disable-next-line import/no-unused-modules
+
+var unsetSides = {
+  top: 'auto',
+  right: 'auto',
+  bottom: 'auto',
+  left: 'auto'
+}; // Round the offsets to the nearest suitable subpixel based on the DPR.
+// Zooming can change the DPR, but it seems to report a value that will
+// cleanly divide the values into the appropriate subpixels.
+
+function roundOffsetsByDPR(_ref) {
+  var x = _ref.x,
+      y = _ref.y;
+  var win = window;
+  var dpr = win.devicePixelRatio || 1;
+  return {
+    x: Object(__WEBPACK_IMPORTED_MODULE_7__utils_math_js__["c" /* round */])(x * dpr) / dpr || 0,
+    y: Object(__WEBPACK_IMPORTED_MODULE_7__utils_math_js__["c" /* round */])(y * dpr) / dpr || 0
+  };
+}
+
+function mapToStyles(_ref2) {
+  var _Object$assign2;
+
+  var popper = _ref2.popper,
+      popperRect = _ref2.popperRect,
+      placement = _ref2.placement,
+      variation = _ref2.variation,
+      offsets = _ref2.offsets,
+      position = _ref2.position,
+      gpuAcceleration = _ref2.gpuAcceleration,
+      adaptive = _ref2.adaptive,
+      roundOffsets = _ref2.roundOffsets,
+      isFixed = _ref2.isFixed;
+
+  var _ref3 = roundOffsets === true ? roundOffsetsByDPR(offsets) : typeof roundOffsets === 'function' ? roundOffsets(offsets) : offsets,
+      _ref3$x = _ref3.x,
+      x = _ref3$x === void 0 ? 0 : _ref3$x,
+      _ref3$y = _ref3.y,
+      y = _ref3$y === void 0 ? 0 : _ref3$y;
+
+  var hasX = offsets.hasOwnProperty('x');
+  var hasY = offsets.hasOwnProperty('y');
+  var sideX = __WEBPACK_IMPORTED_MODULE_0__enums_js__["l" /* left */];
+  var sideY = __WEBPACK_IMPORTED_MODULE_0__enums_js__["u" /* top */];
+  var win = window;
+
+  if (adaptive) {
+    var offsetParent = Object(__WEBPACK_IMPORTED_MODULE_1__dom_utils_getOffsetParent_js__["a" /* default */])(popper);
+    var heightProp = 'clientHeight';
+    var widthProp = 'clientWidth';
+
+    if (offsetParent === Object(__WEBPACK_IMPORTED_MODULE_2__dom_utils_getWindow_js__["a" /* default */])(popper)) {
+      offsetParent = Object(__WEBPACK_IMPORTED_MODULE_3__dom_utils_getDocumentElement_js__["a" /* default */])(popper);
+
+      if (Object(__WEBPACK_IMPORTED_MODULE_4__dom_utils_getComputedStyle_js__["a" /* default */])(offsetParent).position !== 'static' && position === 'absolute') {
+        heightProp = 'scrollHeight';
+        widthProp = 'scrollWidth';
+      }
+    } // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
+
+
+    offsetParent = offsetParent;
+
+    if (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["u" /* top */] || (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["l" /* left */] || placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["s" /* right */]) && variation === __WEBPACK_IMPORTED_MODULE_0__enums_js__["k" /* end */]) {
+      sideY = __WEBPACK_IMPORTED_MODULE_0__enums_js__["i" /* bottom */];
+      var offsetY = isFixed && win.visualViewport ? win.visualViewport.height : // $FlowFixMe[prop-missing]
+      offsetParent[heightProp];
+      y -= offsetY - popperRect.height;
+      y *= gpuAcceleration ? 1 : -1;
+    }
+
+    if (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["l" /* left */] || (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["u" /* top */] || placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["i" /* bottom */]) && variation === __WEBPACK_IMPORTED_MODULE_0__enums_js__["k" /* end */]) {
+      sideX = __WEBPACK_IMPORTED_MODULE_0__enums_js__["s" /* right */];
+      var offsetX = isFixed && win.visualViewport ? win.visualViewport.width : // $FlowFixMe[prop-missing]
+      offsetParent[widthProp];
+      x -= offsetX - popperRect.width;
+      x *= gpuAcceleration ? 1 : -1;
+    }
+  }
+
+  var commonStyles = Object.assign({
+    position: position
+  }, adaptive && unsetSides);
+
+  if (gpuAcceleration) {
+    var _Object$assign;
+
+    return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) <= 1 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
+  }
+
+  return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
+}
+
+function computeStyles(_ref4) {
+  var state = _ref4.state,
+      options = _ref4.options;
+  var _options$gpuAccelerat = options.gpuAcceleration,
+      gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
+      _options$adaptive = options.adaptive,
+      adaptive = _options$adaptive === void 0 ? true : _options$adaptive,
+      _options$roundOffsets = options.roundOffsets,
+      roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
+
+  if (process.env.NODE_ENV !== "production") {
+    var transitionProperty = Object(__WEBPACK_IMPORTED_MODULE_4__dom_utils_getComputedStyle_js__["a" /* default */])(state.elements.popper).transitionProperty || '';
+
+    if (adaptive && ['transform', 'top', 'right', 'bottom', 'left'].some(function (property) {
+      return transitionProperty.indexOf(property) >= 0;
+    })) {
+      console.warn(['Popper: Detected CSS transitions on at least one of the following', 'CSS properties: "transform", "top", "right", "bottom", "left".', '\n\n', 'Disable the "computeStyles" modifier\'s `adaptive` option to allow', 'for smooth transitions, or remove these properties from the CSS', 'transition declaration on the popper element if only transitioning', 'opacity or background-color for example.', '\n\n', 'We recommend using the popper element as a wrapper around an inner', 'element that can have any CSS property transitioned for animations.'].join(' '));
+    }
+  }
+
+  var commonStyles = {
+    placement: Object(__WEBPACK_IMPORTED_MODULE_5__utils_getBasePlacement_js__["a" /* default */])(state.placement),
+    variation: Object(__WEBPACK_IMPORTED_MODULE_6__utils_getVariation_js__["a" /* default */])(state.placement),
+    popper: state.elements.popper,
+    popperRect: state.rects.popper,
+    gpuAcceleration: gpuAcceleration,
+    isFixed: state.options.strategy === 'fixed'
+  };
+
+  if (state.modifiersData.popperOffsets != null) {
+    state.styles.popper = Object.assign({}, state.styles.popper, mapToStyles(Object.assign({}, commonStyles, {
+      offsets: state.modifiersData.popperOffsets,
+      position: state.options.strategy,
+      adaptive: adaptive,
+      roundOffsets: roundOffsets
+    })));
+  }
+
+  if (state.modifiersData.arrow != null) {
+    state.styles.arrow = Object.assign({}, state.styles.arrow, mapToStyles(Object.assign({}, commonStyles, {
+      offsets: state.modifiersData.arrow,
+      position: 'absolute',
+      adaptive: false,
+      roundOffsets: roundOffsets
+    })));
+  }
+
+  state.attributes.popper = Object.assign({}, state.attributes.popper, {
+    'data-popper-placement': state.placement
+  });
+} // eslint-disable-next-line import/no-unused-modules
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  name: 'computeStyles',
+  enabled: true,
+  phase: 'beforeWrite',
+  fn: computeStyles,
+  data: {}
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(13)))
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom_utils_getWindow_js__ = __webpack_require__(2);
+ // eslint-disable-next-line import/no-unused-modules
+
+var passive = {
+  passive: true
+};
+
+function effect(_ref) {
+  var state = _ref.state,
+      instance = _ref.instance,
+      options = _ref.options;
+  var _options$scroll = options.scroll,
+      scroll = _options$scroll === void 0 ? true : _options$scroll,
+      _options$resize = options.resize,
+      resize = _options$resize === void 0 ? true : _options$resize;
+  var window = Object(__WEBPACK_IMPORTED_MODULE_0__dom_utils_getWindow_js__["a" /* default */])(state.elements.popper);
+  var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
+
+  if (scroll) {
+    scrollParents.forEach(function (scrollParent) {
+      scrollParent.addEventListener('scroll', instance.update, passive);
+    });
+  }
+
+  if (resize) {
+    window.addEventListener('resize', instance.update, passive);
+  }
+
+  return function () {
+    if (scroll) {
+      scrollParents.forEach(function (scrollParent) {
+        scrollParent.removeEventListener('scroll', instance.update, passive);
+      });
+    }
+
+    if (resize) {
+      window.removeEventListener('resize', instance.update, passive);
+    }
+  };
+} // eslint-disable-next-line import/no-unused-modules
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  name: 'eventListeners',
+  enabled: true,
+  phase: 'write',
+  fn: function fn() {},
+  effect: effect,
+  data: {}
+});
+
+/***/ }),
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getWindowScrollBarX;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBoundingClientRect_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getDocumentElement_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindowScroll_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBoundingClientRect_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getDocumentElement_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindowScroll_js__ = __webpack_require__(21);
 
 
 
@@ -729,24 +1065,92 @@ function getWindowScrollBarX(element) {
 }
 
 /***/ }),
-/* 17 */
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getWindowScroll;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(2);
+
+function getWindowScroll(node) {
+  var win = Object(__WEBPACK_IMPORTED_MODULE_0__getWindow_js__["a" /* default */])(node);
+  var scrollLeft = win.pageXOffset;
+  var scrollTop = win.pageYOffset;
+  return {
+    scrollLeft: scrollLeft,
+    scrollTop: scrollTop
+  };
+}
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = isScrollParent;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getComputedStyle_js__ = __webpack_require__(8);
+
+function isScrollParent(element) {
+  // Firefox wants us to check `-x` and `-y` variations as well
+  var _getComputedStyle = Object(__WEBPACK_IMPORTED_MODULE_0__getComputedStyle_js__["a" /* default */])(element),
+      overflow = _getComputedStyle.overflow,
+      overflowX = _getComputedStyle.overflowX,
+      overflowY = _getComputedStyle.overflowY;
+
+  return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
+}
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_computeOffsets_js__ = __webpack_require__(35);
+
+
+function popperOffsets(_ref) {
+  var state = _ref.state,
+      name = _ref.name;
+  // Offsets are the actual position the popper needs to have to be
+  // properly positioned near its reference element
+  // This is the most basic placement, and will be adjusted by
+  // the modifiers in the next step
+  state.modifiersData[name] = Object(__WEBPACK_IMPORTED_MODULE_0__utils_computeOffsets_js__["a" /* default */])({
+    reference: state.rects.reference,
+    element: state.rects.popper,
+    strategy: 'absolute',
+    placement: state.placement
+  });
+} // eslint-disable-next-line import/no-unused-modules
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  name: 'popperOffsets',
+  enabled: true,
+  phase: 'read',
+  fn: popperOffsets,
+  data: {}
+});
+
+/***/ }),
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["c"] = popperGenerator;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createPopper; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom_utils_getCompositeRect_js__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getLayoutRect_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_listScrollParents_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dom_utils_getOffsetParent_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getLayoutRect_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_listScrollParents_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dom_utils_getOffsetParent_js__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dom_utils_getComputedStyle_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_orderModifiers_js__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_debounce_js__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_validateModifiers_js__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_uniqueBy_js__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_getBasePlacement_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_getBasePlacement_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__utils_mergeByName_js__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__utils_detectOverflow_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__utils_detectOverflow_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__dom_utils_instanceOf_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__enums_js__ = __webpack_require__(0);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_11__utils_detectOverflow_js__["a"]; });
@@ -1009,76 +1413,30 @@ function popperGenerator(generatorOptions) {
 var createPopper = /*#__PURE__*/popperGenerator(); // eslint-disable-next-line import/no-unused-modules
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(13)))
 
 /***/ }),
-/* 18 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getMainAxisFromPlacement;
-function getMainAxisFromPlacement(placement) {
-  return ['top', 'bottom'].indexOf(placement) >= 0 ? 'x' : 'y';
-}
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getWindowScroll;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(5);
-
-function getWindowScroll(node) {
-  var win = Object(__WEBPACK_IMPORTED_MODULE_0__getWindow_js__["a" /* default */])(node);
-  var scrollLeft = win.pageXOffset;
-  var scrollTop = win.pageYOffset;
-  return {
-    scrollLeft: scrollLeft,
-    scrollTop: scrollTop
-  };
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = isScrollParent;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getComputedStyle_js__ = __webpack_require__(8);
-
-function isScrollParent(element) {
-  // Firefox wants us to check `-x` and `-y` variations as well
-  var _getComputedStyle = Object(__WEBPACK_IMPORTED_MODULE_0__getComputedStyle_js__["a" /* default */])(element),
-      overflow = _getComputedStyle.overflow,
-      overflowX = _getComputedStyle.overflowX,
-      overflowY = _getComputedStyle.overflowY;
-
-  return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
-}
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__applyStyles_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__applyStyles_js__ = __webpack_require__(15);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__applyStyles_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__arrow_js__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__arrow_js__ = __webpack_require__(26);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__arrow_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__computeStyles_js__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__computeStyles_js__ = __webpack_require__(18);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__computeStyles_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__eventListeners_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__eventListeners_js__ = __webpack_require__(19);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__eventListeners_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__flip_js__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__flip_js__ = __webpack_require__(32);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_4__flip_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__hide_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__hide_js__ = __webpack_require__(36);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_5__hide_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__offset_js__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__offset_js__ = __webpack_require__(37);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return __WEBPACK_IMPORTED_MODULE_6__offset_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__popperOffsets_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__popperOffsets_js__ = __webpack_require__(23);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return __WEBPACK_IMPORTED_MODULE_7__popperOffsets_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__preventOverflow_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__preventOverflow_js__ = __webpack_require__(38);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return __WEBPACK_IMPORTED_MODULE_8__preventOverflow_js__["a"]; });
 
 
@@ -1091,500 +1449,18 @@ function isScrollParent(element) {
 
 
 /***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom_utils_getNodeName_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_instanceOf_js__ = __webpack_require__(1);
-
- // This modifier takes the styles prepared by the `computeStyles` modifier
-// and applies them to the HTMLElements such as popper and arrow
-
-function applyStyles(_ref) {
-  var state = _ref.state;
-  Object.keys(state.elements).forEach(function (name) {
-    var style = state.styles[name] || {};
-    var attributes = state.attributes[name] || {};
-    var element = state.elements[name]; // arrow is optional + virtual elements
-
-    if (!Object(__WEBPACK_IMPORTED_MODULE_1__dom_utils_instanceOf_js__["b" /* isHTMLElement */])(element) || !Object(__WEBPACK_IMPORTED_MODULE_0__dom_utils_getNodeName_js__["a" /* default */])(element)) {
-      return;
-    } // Flow doesn't support to extend this property, but it's the most
-    // effective way to apply styles to an HTMLElement
-    // $FlowFixMe[cannot-write]
-
-
-    Object.assign(element.style, style);
-    Object.keys(attributes).forEach(function (name) {
-      var value = attributes[name];
-
-      if (value === false) {
-        element.removeAttribute(name);
-      } else {
-        element.setAttribute(name, value === true ? '' : value);
-      }
-    });
-  });
-}
-
-function effect(_ref2) {
-  var state = _ref2.state;
-  var initialStyles = {
-    popper: {
-      position: state.options.strategy,
-      left: '0',
-      top: '0',
-      margin: '0'
-    },
-    arrow: {
-      position: 'absolute'
-    },
-    reference: {}
-  };
-  Object.assign(state.elements.popper.style, initialStyles.popper);
-  state.styles = initialStyles;
-
-  if (state.elements.arrow) {
-    Object.assign(state.elements.arrow.style, initialStyles.arrow);
-  }
-
-  return function () {
-    Object.keys(state.elements).forEach(function (name) {
-      var element = state.elements[name];
-      var attributes = state.attributes[name] || {};
-      var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
-
-      var style = styleProperties.reduce(function (style, property) {
-        style[property] = '';
-        return style;
-      }, {}); // arrow is optional + virtual elements
-
-      if (!Object(__WEBPACK_IMPORTED_MODULE_1__dom_utils_instanceOf_js__["b" /* isHTMLElement */])(element) || !Object(__WEBPACK_IMPORTED_MODULE_0__dom_utils_getNodeName_js__["a" /* default */])(element)) {
-        return;
-      }
-
-      Object.assign(element.style, style);
-      Object.keys(attributes).forEach(function (attribute) {
-        element.removeAttribute(attribute);
-      });
-    });
-  };
-} // eslint-disable-next-line import/no-unused-modules
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  name: 'applyStyles',
-  enabled: true,
-  phase: 'write',
-  fn: applyStyles,
-  effect: effect,
-  requires: ['computeStyles']
-});
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = contains;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instanceOf_js__ = __webpack_require__(1);
-
-function contains(parent, child) {
-  var rootNode = child.getRootNode && child.getRootNode(); // First, attempt with faster native method
-
-  if (parent.contains(child)) {
-    return true;
-  } // then fallback to custom implementation with Shadow DOM support
-  else if (rootNode && Object(__WEBPACK_IMPORTED_MODULE_0__instanceOf_js__["c" /* isShadowRoot */])(rootNode)) {
-      var next = child;
-
-      do {
-        if (next && parent.isSameNode(next)) {
-          return true;
-        } // $FlowFixMe[prop-missing]: need a better way to handle this...
-
-
-        next = next.parentNode || next.host;
-      } while (next);
-    } // Give up, the result is false
-
-
-  return false;
-}
-
-/***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getFreshSideObject;
-function getFreshSideObject() {
-  return {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0
-  };
-}
-
-/***/ }),
-/* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export mapToStyles */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enums_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getOffsetParent_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_getWindow_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dom_utils_getDocumentElement_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dom_utils_getComputedStyle_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_getBasePlacement_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_getVariation_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_math_js__ = __webpack_require__(7);
-
-
-
-
-
-
-
- // eslint-disable-next-line import/no-unused-modules
-
-var unsetSides = {
-  top: 'auto',
-  right: 'auto',
-  bottom: 'auto',
-  left: 'auto'
-}; // Round the offsets to the nearest suitable subpixel based on the DPR.
-// Zooming can change the DPR, but it seems to report a value that will
-// cleanly divide the values into the appropriate subpixels.
-
-function roundOffsetsByDPR(_ref) {
-  var x = _ref.x,
-      y = _ref.y;
-  var win = window;
-  var dpr = win.devicePixelRatio || 1;
-  return {
-    x: Object(__WEBPACK_IMPORTED_MODULE_7__utils_math_js__["c" /* round */])(x * dpr) / dpr || 0,
-    y: Object(__WEBPACK_IMPORTED_MODULE_7__utils_math_js__["c" /* round */])(y * dpr) / dpr || 0
-  };
-}
-
-function mapToStyles(_ref2) {
-  var _Object$assign2;
-
-  var popper = _ref2.popper,
-      popperRect = _ref2.popperRect,
-      placement = _ref2.placement,
-      variation = _ref2.variation,
-      offsets = _ref2.offsets,
-      position = _ref2.position,
-      gpuAcceleration = _ref2.gpuAcceleration,
-      adaptive = _ref2.adaptive,
-      roundOffsets = _ref2.roundOffsets,
-      isFixed = _ref2.isFixed;
-
-  var _ref3 = roundOffsets === true ? roundOffsetsByDPR(offsets) : typeof roundOffsets === 'function' ? roundOffsets(offsets) : offsets,
-      _ref3$x = _ref3.x,
-      x = _ref3$x === void 0 ? 0 : _ref3$x,
-      _ref3$y = _ref3.y,
-      y = _ref3$y === void 0 ? 0 : _ref3$y;
-
-  var hasX = offsets.hasOwnProperty('x');
-  var hasY = offsets.hasOwnProperty('y');
-  var sideX = __WEBPACK_IMPORTED_MODULE_0__enums_js__["l" /* left */];
-  var sideY = __WEBPACK_IMPORTED_MODULE_0__enums_js__["u" /* top */];
-  var win = window;
-
-  if (adaptive) {
-    var offsetParent = Object(__WEBPACK_IMPORTED_MODULE_1__dom_utils_getOffsetParent_js__["a" /* default */])(popper);
-    var heightProp = 'clientHeight';
-    var widthProp = 'clientWidth';
-
-    if (offsetParent === Object(__WEBPACK_IMPORTED_MODULE_2__dom_utils_getWindow_js__["a" /* default */])(popper)) {
-      offsetParent = Object(__WEBPACK_IMPORTED_MODULE_3__dom_utils_getDocumentElement_js__["a" /* default */])(popper);
-
-      if (Object(__WEBPACK_IMPORTED_MODULE_4__dom_utils_getComputedStyle_js__["a" /* default */])(offsetParent).position !== 'static' && position === 'absolute') {
-        heightProp = 'scrollHeight';
-        widthProp = 'scrollWidth';
-      }
-    } // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
-
-
-    offsetParent = offsetParent;
-
-    if (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["u" /* top */] || (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["l" /* left */] || placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["s" /* right */]) && variation === __WEBPACK_IMPORTED_MODULE_0__enums_js__["k" /* end */]) {
-      sideY = __WEBPACK_IMPORTED_MODULE_0__enums_js__["i" /* bottom */];
-      var offsetY = isFixed && win.visualViewport ? win.visualViewport.height : // $FlowFixMe[prop-missing]
-      offsetParent[heightProp];
-      y -= offsetY - popperRect.height;
-      y *= gpuAcceleration ? 1 : -1;
-    }
-
-    if (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["l" /* left */] || (placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["u" /* top */] || placement === __WEBPACK_IMPORTED_MODULE_0__enums_js__["i" /* bottom */]) && variation === __WEBPACK_IMPORTED_MODULE_0__enums_js__["k" /* end */]) {
-      sideX = __WEBPACK_IMPORTED_MODULE_0__enums_js__["s" /* right */];
-      var offsetX = isFixed && win.visualViewport ? win.visualViewport.width : // $FlowFixMe[prop-missing]
-      offsetParent[widthProp];
-      x -= offsetX - popperRect.width;
-      x *= gpuAcceleration ? 1 : -1;
-    }
-  }
-
-  var commonStyles = Object.assign({
-    position: position
-  }, adaptive && unsetSides);
-
-  if (gpuAcceleration) {
-    var _Object$assign;
-
-    return Object.assign({}, commonStyles, (_Object$assign = {}, _Object$assign[sideY] = hasY ? '0' : '', _Object$assign[sideX] = hasX ? '0' : '', _Object$assign.transform = (win.devicePixelRatio || 1) <= 1 ? "translate(" + x + "px, " + y + "px)" : "translate3d(" + x + "px, " + y + "px, 0)", _Object$assign));
-  }
-
-  return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
-}
-
-function computeStyles(_ref4) {
-  var state = _ref4.state,
-      options = _ref4.options;
-  var _options$gpuAccelerat = options.gpuAcceleration,
-      gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
-      _options$adaptive = options.adaptive,
-      adaptive = _options$adaptive === void 0 ? true : _options$adaptive,
-      _options$roundOffsets = options.roundOffsets,
-      roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
-
-  if (process.env.NODE_ENV !== "production") {
-    var transitionProperty = Object(__WEBPACK_IMPORTED_MODULE_4__dom_utils_getComputedStyle_js__["a" /* default */])(state.elements.popper).transitionProperty || '';
-
-    if (adaptive && ['transform', 'top', 'right', 'bottom', 'left'].some(function (property) {
-      return transitionProperty.indexOf(property) >= 0;
-    })) {
-      console.warn(['Popper: Detected CSS transitions on at least one of the following', 'CSS properties: "transform", "top", "right", "bottom", "left".', '\n\n', 'Disable the "computeStyles" modifier\'s `adaptive` option to allow', 'for smooth transitions, or remove these properties from the CSS', 'transition declaration on the popper element if only transitioning', 'opacity or background-color for example.', '\n\n', 'We recommend using the popper element as a wrapper around an inner', 'element that can have any CSS property transitioned for animations.'].join(' '));
-    }
-  }
-
-  var commonStyles = {
-    placement: Object(__WEBPACK_IMPORTED_MODULE_5__utils_getBasePlacement_js__["a" /* default */])(state.placement),
-    variation: Object(__WEBPACK_IMPORTED_MODULE_6__utils_getVariation_js__["a" /* default */])(state.placement),
-    popper: state.elements.popper,
-    popperRect: state.rects.popper,
-    gpuAcceleration: gpuAcceleration,
-    isFixed: state.options.strategy === 'fixed'
-  };
-
-  if (state.modifiersData.popperOffsets != null) {
-    state.styles.popper = Object.assign({}, state.styles.popper, mapToStyles(Object.assign({}, commonStyles, {
-      offsets: state.modifiersData.popperOffsets,
-      position: state.options.strategy,
-      adaptive: adaptive,
-      roundOffsets: roundOffsets
-    })));
-  }
-
-  if (state.modifiersData.arrow != null) {
-    state.styles.arrow = Object.assign({}, state.styles.arrow, mapToStyles(Object.assign({}, commonStyles, {
-      offsets: state.modifiersData.arrow,
-      position: 'absolute',
-      adaptive: false,
-      roundOffsets: roundOffsets
-    })));
-  }
-
-  state.attributes.popper = Object.assign({}, state.attributes.popper, {
-    'data-popper-placement': state.placement
-  });
-} // eslint-disable-next-line import/no-unused-modules
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  name: 'computeStyles',
-  enabled: true,
-  phase: 'beforeWrite',
-  fn: computeStyles,
-  data: {}
-});
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(11)))
-
-/***/ }),
 /* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dom_utils_getWindow_js__ = __webpack_require__(5);
- // eslint-disable-next-line import/no-unused-modules
-
-var passive = {
-  passive: true
-};
-
-function effect(_ref) {
-  var state = _ref.state,
-      instance = _ref.instance,
-      options = _ref.options;
-  var _options$scroll = options.scroll,
-      scroll = _options$scroll === void 0 ? true : _options$scroll,
-      _options$resize = options.resize,
-      resize = _options$resize === void 0 ? true : _options$resize;
-  var window = Object(__WEBPACK_IMPORTED_MODULE_0__dom_utils_getWindow_js__["a" /* default */])(state.elements.popper);
-  var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
-
-  if (scroll) {
-    scrollParents.forEach(function (scrollParent) {
-      scrollParent.addEventListener('scroll', instance.update, passive);
-    });
-  }
-
-  if (resize) {
-    window.addEventListener('resize', instance.update, passive);
-  }
-
-  return function () {
-    if (scroll) {
-      scrollParents.forEach(function (scrollParent) {
-        scrollParent.removeEventListener('scroll', instance.update, passive);
-      });
-    }
-
-    if (resize) {
-      window.removeEventListener('resize', instance.update, passive);
-    }
-  };
-} // eslint-disable-next-line import/no-unused-modules
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  name: 'eventListeners',
-  enabled: true,
-  phase: 'write',
-  fn: function fn() {},
-  effect: effect,
-  data: {}
-});
-
-/***/ }),
-/* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = listScrollParents;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getScrollParent_js__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getParentNode_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindow_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__isScrollParent_js__ = __webpack_require__(20);
-
-
-
-
-/*
-given a DOM element, return the list of all scroll parents, up the list of ancesors
-until we get to the top window object. This list is what we attach scroll listeners
-to, because if any of these parent elements scroll, we'll need to re-calculate the
-reference element's position.
-*/
-
-function listScrollParents(element, list) {
-  var _element$ownerDocumen;
-
-  if (list === void 0) {
-    list = [];
-  }
-
-  var scrollParent = Object(__WEBPACK_IMPORTED_MODULE_0__getScrollParent_js__["a" /* default */])(element);
-  var isBody = scrollParent === ((_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body);
-  var win = Object(__WEBPACK_IMPORTED_MODULE_2__getWindow_js__["a" /* default */])(scrollParent);
-  var target = isBody ? [win].concat(win.visualViewport || [], Object(__WEBPACK_IMPORTED_MODULE_3__isScrollParent_js__["a" /* default */])(scrollParent) ? scrollParent : []) : scrollParent;
-  var updatedList = list.concat(target);
-  return isBody ? updatedList : // $FlowFixMe[incompatible-call]: isBody tells us target will be an HTMLElement here
-  updatedList.concat(listScrollParents(Object(__WEBPACK_IMPORTED_MODULE_1__getParentNode_js__["a" /* default */])(target)));
-}
-
-/***/ }),
-/* 28 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = rectToClientRect;
-function rectToClientRect(rect) {
-  return Object.assign({}, rect, {
-    left: rect.x,
-    top: rect.y,
-    right: rect.x + rect.width,
-    bottom: rect.y + rect.height
-  });
-}
-
-/***/ }),
-/* 29 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_computeOffsets_js__ = __webpack_require__(36);
-
-
-function popperOffsets(_ref) {
-  var state = _ref.state,
-      name = _ref.name;
-  // Offsets are the actual position the popper needs to have to be
-  // properly positioned near its reference element
-  // This is the most basic placement, and will be adjusted by
-  // the modifiers in the next step
-  state.modifiersData[name] = Object(__WEBPACK_IMPORTED_MODULE_0__utils_computeOffsets_js__["a" /* default */])({
-    reference: state.rects.reference,
-    element: state.rects.popper,
-    strategy: 'absolute',
-    placement: state.placement
-  });
-} // eslint-disable-next-line import/no-unused-modules
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  name: 'popperOffsets',
-  enabled: true,
-  phase: 'read',
-  fn: popperOffsets,
-  data: {}
-});
-
-/***/ }),
-/* 30 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createPopper; });
-/* unused harmony export defaultModifiers */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createPopper_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modifiers_eventListeners_js__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modifiers_popperOffsets_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modifiers_computeStyles_js__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modifiers_applyStyles_js__ = __webpack_require__(22);
-/* unused harmony reexport popperGenerator */
-/* unused harmony reexport detectOverflow */
-
-
-
-
-
-var defaultModifiers = [__WEBPACK_IMPORTED_MODULE_1__modifiers_eventListeners_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__modifiers_popperOffsets_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__modifiers_computeStyles_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__modifiers_applyStyles_js__["a" /* default */]];
-var createPopper = /*#__PURE__*/Object(__WEBPACK_IMPORTED_MODULE_0__createPopper_js__["c" /* popperGenerator */])({
-  defaultModifiers: defaultModifiers
-}); // eslint-disable-next-line import/no-unused-modules
-
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_getBasePlacement_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getLayoutRect_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_contains_js__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dom_utils_getOffsetParent_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_getMainAxisFromPlacement_js__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_within_js__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_mergePaddingObject_js__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_expandToHashMap_js__ = __webpack_require__(34);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_getBasePlacement_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dom_utils_getLayoutRect_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dom_utils_contains_js__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__dom_utils_getOffsetParent_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_getMainAxisFromPlacement_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_within_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_mergePaddingObject_js__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_expandToHashMap_js__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__enums_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__dom_utils_instanceOf_js__ = __webpack_require__(1);
 
@@ -1688,10 +1564,41 @@ function effect(_ref2) {
   requires: ['popperOffsets'],
   requiresIfExists: ['preventOverflow']
 });
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(13)))
 
 /***/ }),
-/* 32 */
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = contains;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__instanceOf_js__ = __webpack_require__(1);
+
+function contains(parent, child) {
+  var rootNode = child.getRootNode && child.getRootNode(); // First, attempt with faster native method
+
+  if (parent.contains(child)) {
+    return true;
+  } // then fallback to custom implementation with Shadow DOM support
+  else if (rootNode && Object(__WEBPACK_IMPORTED_MODULE_0__instanceOf_js__["c" /* isShadowRoot */])(rootNode)) {
+      var next = child;
+
+      do {
+        if (next && parent.isSameNode(next)) {
+          return true;
+        } // $FlowFixMe[prop-missing]: need a better way to handle this...
+
+
+        next = next.parentNode || next.host;
+      } while (next);
+    } // Give up, the result is false
+
+
+  return false;
+}
+
+/***/ }),
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1708,19 +1615,34 @@ function withinMaxClamp(min, value, max) {
 }
 
 /***/ }),
-/* 33 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = mergePaddingObject;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getFreshSideObject_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getFreshSideObject_js__ = __webpack_require__(30);
 
 function mergePaddingObject(paddingObject) {
   return Object.assign({}, Object(__WEBPACK_IMPORTED_MODULE_0__getFreshSideObject_js__["a" /* default */])(), paddingObject);
 }
 
 /***/ }),
-/* 34 */
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getFreshSideObject;
+function getFreshSideObject() {
+  return {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  };
+}
+
+/***/ }),
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1733,17 +1655,17 @@ function expandToHashMap(value, keys) {
 }
 
 /***/ }),
-/* 35 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_getOppositePlacement_js__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_getBasePlacement_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_getBasePlacement_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_getOppositeVariationPlacement_js__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_detectOverflow_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_detectOverflow_js__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_computeAutoPlacement_js__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__enums_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_getVariation_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_getVariation_js__ = __webpack_require__(11);
 
 
 
@@ -1893,14 +1815,66 @@ function flip(_ref) {
 });
 
 /***/ }),
-/* 36 */
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = listScrollParents;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getScrollParent_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getParentNode_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindow_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__isScrollParent_js__ = __webpack_require__(22);
+
+
+
+
+/*
+given a DOM element, return the list of all scroll parents, up the list of ancesors
+until we get to the top window object. This list is what we attach scroll listeners
+to, because if any of these parent elements scroll, we'll need to re-calculate the
+reference element's position.
+*/
+
+function listScrollParents(element, list) {
+  var _element$ownerDocumen;
+
+  if (list === void 0) {
+    list = [];
+  }
+
+  var scrollParent = Object(__WEBPACK_IMPORTED_MODULE_0__getScrollParent_js__["a" /* default */])(element);
+  var isBody = scrollParent === ((_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body);
+  var win = Object(__WEBPACK_IMPORTED_MODULE_2__getWindow_js__["a" /* default */])(scrollParent);
+  var target = isBody ? [win].concat(win.visualViewport || [], Object(__WEBPACK_IMPORTED_MODULE_3__isScrollParent_js__["a" /* default */])(scrollParent) ? scrollParent : []) : scrollParent;
+  var updatedList = list.concat(target);
+  return isBody ? updatedList : // $FlowFixMe[incompatible-call]: isBody tells us target will be an HTMLElement here
+  updatedList.concat(listScrollParents(Object(__WEBPACK_IMPORTED_MODULE_1__getParentNode_js__["a" /* default */])(target)));
+}
+
+/***/ }),
+/* 34 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = rectToClientRect;
+function rectToClientRect(rect) {
+  return Object.assign({}, rect, {
+    left: rect.x,
+    top: rect.y,
+    right: rect.x + rect.width,
+    bottom: rect.y + rect.height
+  });
+}
+
+/***/ }),
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = computeOffsets;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBasePlacement_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getVariation_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getMainAxisFromPlacement_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBasePlacement_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getVariation_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getMainAxisFromPlacement_js__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__enums_js__ = __webpack_require__(0);
 
 
@@ -1974,12 +1948,12 @@ function computeOffsets(_ref) {
 }
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enums_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_detectOverflow_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_detectOverflow_js__ = __webpack_require__(12);
 
 
 
@@ -2043,12 +2017,12 @@ function hide(_ref) {
 });
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export distanceAndSkiddingToXY */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_getBasePlacement_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_getBasePlacement_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enums_js__ = __webpack_require__(0);
 
  // eslint-disable-next-line import/no-unused-modules
@@ -2106,20 +2080,20 @@ function offset(_ref2) {
 });
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enums_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_getBasePlacement_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_getMainAxisFromPlacement_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_getBasePlacement_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_getMainAxisFromPlacement_js__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_getAltAxis_js__ = __webpack_require__(55);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_within_js__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__dom_utils_getLayoutRect_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__dom_utils_getOffsetParent_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_detectOverflow_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_getVariation_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_getFreshSideObject_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_within_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__dom_utils_getLayoutRect_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__dom_utils_getOffsetParent_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_detectOverflow_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_getVariation_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__utils_getFreshSideObject_js__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__utils_math_js__ = __webpack_require__(7);
 
 
@@ -2265,11 +2239,37 @@ function preventOverflow(_ref) {
 });
 
 /***/ }),
+/* 39 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createPopper; });
+/* unused harmony export defaultModifiers */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createPopper_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modifiers_eventListeners_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modifiers_popperOffsets_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modifiers_computeStyles_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modifiers_applyStyles_js__ = __webpack_require__(15);
+/* unused harmony reexport popperGenerator */
+/* unused harmony reexport detectOverflow */
+
+
+
+
+
+var defaultModifiers = [__WEBPACK_IMPORTED_MODULE_1__modifiers_eventListeners_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__modifiers_popperOffsets_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_3__modifiers_computeStyles_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__modifiers_applyStyles_js__["a" /* default */]];
+var createPopper = /*#__PURE__*/Object(__WEBPACK_IMPORTED_MODULE_0__createPopper_js__["c" /* popperGenerator */])({
+  defaultModifiers: defaultModifiers
+}); // eslint-disable-next-line import/no-unused-modules
+
+
+
+/***/ }),
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(41);
-module.exports = __webpack_require__(71);
+module.exports = __webpack_require__(69);
 
 
 /***/ }),
@@ -2287,8 +2287,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__autoload_bootstrap_js__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_Router__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__routes_common__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__routes_home__ = __webpack_require__(69);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__routes_about__ = __webpack_require__(70);
 /** import external dependencies */
 
 
@@ -2303,16 +2301,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
-
 /** Populate Router instance with DOM routes */
 var routes = new __WEBPACK_IMPORTED_MODULE_4__util_Router__["a" /* default */]({
   // All pages
   common: __WEBPACK_IMPORTED_MODULE_5__routes_common__["a" /* default */],
-  // Home page
-  home: __WEBPACK_IMPORTED_MODULE_6__routes_home__["a" /* default */],
-  // About Us page, note the change from about-us to aboutUs.
-  aboutUs: __WEBPACK_IMPORTED_MODULE_7__routes_about__["a" /* default */],
 });
 
 // Load Events
@@ -16242,7 +16234,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "write", function() { return __WEBPACK_IMPORTED_MODULE_0__enums_js__["x"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "afterWrite", function() { return __WEBPACK_IMPORTED_MODULE_0__enums_js__["c"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "modifierPhases", function() { return __WEBPACK_IMPORTED_MODULE_0__enums_js__["n"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__ = __webpack_require__(25);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "applyStyles", function() { return __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__["a"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "arrow", function() { return __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__["b"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "computeStyles", function() { return __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__["c"]; });
@@ -16252,13 +16244,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "offset", function() { return __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__["g"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "popperOffsets", function() { return __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__["h"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "preventOverflow", function() { return __WEBPACK_IMPORTED_MODULE_1__modifiers_index_js__["i"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__createPopper_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__createPopper_js__ = __webpack_require__(24);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "popperGenerator", function() { return __WEBPACK_IMPORTED_MODULE_2__createPopper_js__["c"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "detectOverflow", function() { return __WEBPACK_IMPORTED_MODULE_2__createPopper_js__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createPopperBase", function() { return __WEBPACK_IMPORTED_MODULE_2__createPopper_js__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__popper_js__ = __webpack_require__(65);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createPopper", function() { return __WEBPACK_IMPORTED_MODULE_3__popper_js__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__popper_lite_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__popper_lite_js__ = __webpack_require__(39);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createPopperLite", function() { return __WEBPACK_IMPORTED_MODULE_4__popper_lite_js__["a"]; });
 
  // eslint-disable-next-line import/no-unused-modules
@@ -16324,16 +16316,16 @@ function getOppositeVariationPlacement(placement) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__enums_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getViewportRect_js__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getDocumentRect_js__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__listScrollParents_js__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__getOffsetParent_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__getDocumentElement_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__listScrollParents_js__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__getOffsetParent_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__getDocumentElement_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__getComputedStyle_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__instanceOf_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__getBoundingClientRect_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__getBoundingClientRect_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__getParentNode_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__contains_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__contains_js__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__getNodeName_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__utils_rectToClientRect_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__utils_rectToClientRect_js__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__utils_math_js__ = __webpack_require__(7);
 
 
@@ -16412,9 +16404,9 @@ function getClippingRect(element, boundary, rootBoundary) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getViewportRect;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getDocumentElement_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindowScrollBarX_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindow_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getDocumentElement_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindowScrollBarX_js__ = __webpack_require__(20);
 
 
 
@@ -16462,10 +16454,10 @@ function getViewportRect(element) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getDocumentRect;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getDocumentElement_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getDocumentElement_js__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getComputedStyle_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindowScrollBarX_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getWindowScroll_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getWindowScrollBarX_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getWindowScroll_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_math_js__ = __webpack_require__(7);
 
 
@@ -16504,7 +16496,7 @@ function getDocumentRect(element) {
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getScrollParent;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getParentNode_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isScrollParent_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isScrollParent_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getNodeName_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instanceOf_js__ = __webpack_require__(1);
 
@@ -16530,10 +16522,10 @@ function getScrollParent(node) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = computeAutoPlacement;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getVariation_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getVariation_js__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__enums_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__detectOverflow_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getBasePlacement_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__detectOverflow_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getBasePlacement_js__ = __webpack_require__(4);
 
 
 
@@ -16581,7 +16573,7 @@ function computeAutoPlacement(state, options) {
     return overflows[a] - overflows[b];
   });
 }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(13)))
 
 /***/ }),
 /* 55 */
@@ -16599,13 +16591,13 @@ function getAltAxis(axis) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getCompositeRect;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBoundingClientRect_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getBoundingClientRect_js__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getNodeScroll_js__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__getNodeName_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__instanceOf_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__getWindowScrollBarX_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__getDocumentElement_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__isScrollParent_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__getWindowScrollBarX_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__getDocumentElement_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__isScrollParent_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__utils_math_js__ = __webpack_require__(7);
 
 
@@ -16672,8 +16664,8 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getNodeScroll;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindowScroll_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getWindow_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getWindowScroll_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getWindow_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__instanceOf_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getHTMLElementScroll_js__ = __webpack_require__(58);
 
@@ -16927,21 +16919,21 @@ function mergeByName(modifiers) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createPopper; });
 /* unused harmony export defaultModifiers */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createPopper_js__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modifiers_eventListeners_js__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modifiers_popperOffsets_js__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modifiers_computeStyles_js__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modifiers_applyStyles_js__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modifiers_offset_js__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modifiers_flip_js__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modifiers_preventOverflow_js__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modifiers_arrow_js__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modifiers_hide_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createPopper_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modifiers_eventListeners_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modifiers_popperOffsets_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modifiers_computeStyles_js__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modifiers_applyStyles_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modifiers_offset_js__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modifiers_flip_js__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modifiers_preventOverflow_js__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modifiers_arrow_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modifiers_hide_js__ = __webpack_require__(36);
 /* unused harmony reexport popperGenerator */
 /* unused harmony reexport detectOverflow */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__popper_lite_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__popper_lite_js__ = __webpack_require__(39);
 /* unused harmony reexport createPopperLite */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modifiers_index_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modifiers_index_js__ = __webpack_require__(25);
 /* unused harmony namespace reexport */
 
 
@@ -17061,10 +17053,8 @@ Router.prototype.loadEvents = function loadEvents () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($, jQuery) {/* harmony default export */ __webpack_exports__["a"] = ({
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony default export */ __webpack_exports__["a"] = ({
   init: function init() {
-    $('[data-fancybox]').fancybox();
-
     jQuery('img.svg').each(function(){
       var $img = jQuery(this);
       var imgID = $img.attr('id');
@@ -17096,93 +17086,16 @@ Router.prototype.loadEvents = function loadEvents () {
         $img.replaceWith($svg);
       }, 'xml');
     });
-
-    $('.slider-single').slick({
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: false,
-      infinite: true,
-    });
-
-    $('.slider-noticias').slick({
-      autoplay: true,
-      dots: false,
-      centerMode: false,
-      arrows: false,
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      infinite: false,
-      responsive: [
-        {
-          breakpoint: 1200,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        },
-        {
-          breakpoint: 992,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        },
-        {
-          breakpoint: 576,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        } ],
-    });
   },
   finalize: function finalize() {
     
   },
 });
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3), __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
 /* 69 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-  init: function init() {
-    
-  },
-  finalize: function finalize() {
-    // JavaScript to be fired on the home page, after the init JS
-  },
-});
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-  init: function init() {
-    // JavaScript to be fired on the about us page
-  },
-});
-
-
-/***/ }),
-/* 71 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

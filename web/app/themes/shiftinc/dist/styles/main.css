@@ -17055,8 +17055,7 @@ fieldset:disabled .banner .nav a:last-child,
 
 /* line 14, node_modules/bootstrap/scss/_nav.scss */
 
-.nav-link,
-.banner .nav li {
+.nav-link {
   display: block;
   padding: 0.5rem 1rem;
   color: #d7294e;
@@ -17067,8 +17066,7 @@ fieldset:disabled .banner .nav a:last-child,
 @media (prefers-reduced-motion: reduce) {
   /* line 14, node_modules/bootstrap/scss/_nav.scss */
 
-  .nav-link,
-  .banner .nav li {
+  .nav-link {
     transition: none;
   }
 }
@@ -17076,16 +17074,13 @@ fieldset:disabled .banner .nav a:last-child,
 /* line 23, node_modules/bootstrap/scss/_nav.scss */
 
 .nav-link:hover,
-.banner .nav li:hover,
-.nav-link:focus,
-.banner .nav li:focus {
+.nav-link:focus {
   color: #ac213e;
 }
 
 /* line 30, node_modules/bootstrap/scss/_nav.scss */
 
-.nav-link.disabled,
-.banner .nav li.disabled {
+.nav-link.disabled {
   color: #6c757d;
   pointer-events: none;
   cursor: default;
@@ -17099,9 +17094,7 @@ fieldset:disabled .banner .nav a:last-child,
 
 /* line 44, node_modules/bootstrap/scss/_nav.scss */
 
-.nav-tabs .nav-link,
-.nav-tabs .banner .nav li,
-.banner .nav .nav-tabs li {
+.nav-tabs .nav-link {
   margin-bottom: -1px;
   background: none;
   border: 1px solid transparent;
@@ -17112,20 +17105,14 @@ fieldset:disabled .banner .nav a:last-child,
 /* line 50, node_modules/bootstrap/scss/_nav.scss */
 
 .nav-tabs .nav-link:hover,
-.nav-tabs .banner .nav li:hover,
-.banner .nav .nav-tabs li:hover,
-.nav-tabs .nav-link:focus,
-.nav-tabs .banner .nav li:focus,
-.banner .nav .nav-tabs li:focus {
+.nav-tabs .nav-link:focus {
   border-color: #e9ecef #e9ecef #dee2e6;
   isolation: isolate;
 }
 
 /* line 57, node_modules/bootstrap/scss/_nav.scss */
 
-.nav-tabs .nav-link.disabled,
-.nav-tabs .banner .nav li.disabled,
-.banner .nav .nav-tabs li.disabled {
+.nav-tabs .nav-link.disabled {
   color: #6c757d;
   background-color: transparent;
   border-color: transparent;
@@ -17134,15 +17121,7 @@ fieldset:disabled .banner .nav a:last-child,
 /* line 64, node_modules/bootstrap/scss/_nav.scss */
 
 .nav-tabs .nav-link.active,
-.nav-tabs .banner .nav li.active,
-.banner .nav .nav-tabs li.active,
-.nav-tabs .nav-item.show .nav-link,
-.nav-tabs .banner .nav li.show .nav-link,
-.banner .nav .nav-tabs li.show .nav-link,
-.nav-tabs .nav-item.show .banner .nav li,
-.banner .nav .nav-tabs .nav-item.show li,
-.nav-tabs .banner .nav li.show li,
-.banner .nav .nav-tabs li.show li {
+.nav-tabs .nav-item.show .nav-link {
   color: #495057;
   background-color: #fff;
   border-color: #dee2e6 #dee2e6 #fff;
@@ -17158,9 +17137,7 @@ fieldset:disabled .banner .nav a:last-child,
 
 /* line 85, node_modules/bootstrap/scss/_nav.scss */
 
-.nav-pills .nav-link,
-.nav-pills .banner .nav li,
-.banner .nav .nav-pills li {
+.nav-pills .nav-link {
   background: none;
   border: 0;
   border-radius: 0.25rem;
@@ -17169,11 +17146,7 @@ fieldset:disabled .banner .nav a:last-child,
 /* line 91, node_modules/bootstrap/scss/_nav.scss */
 
 .nav-pills .nav-link.active,
-.nav-pills .banner .nav li.active,
-.banner .nav .nav-pills li.active,
-.nav-pills .show > .nav-link,
-.nav-pills .banner .nav .show > li,
-.banner .nav .nav-pills .show > li {
+.nav-pills .show > .nav-link {
   color: #fff;
   background-color: #d7294e;
 }
@@ -17181,10 +17154,7 @@ fieldset:disabled .banner .nav a:last-child,
 /* line 104, node_modules/bootstrap/scss/_nav.scss */
 
 .nav-fill > .nav-link,
-.banner .nav .nav-fill > li,
-.nav-fill .nav-item,
-.nav-fill .banner .nav li,
-.banner .nav .nav-fill li {
+.nav-fill .nav-item {
   flex: 1 1 auto;
   text-align: center;
 }
@@ -17192,10 +17162,7 @@ fieldset:disabled .banner .nav a:last-child,
 /* line 112, node_modules/bootstrap/scss/_nav.scss */
 
 .nav-justified > .nav-link,
-.banner .nav .nav-justified > li,
-.nav-justified .nav-item,
-.nav-justified .banner .nav li,
-.banner .nav .nav-justified li {
+.nav-justified .nav-item {
   flex-basis: 0;
   flex-grow: 1;
   text-align: center;
@@ -17204,19 +17171,7 @@ fieldset:disabled .banner .nav a:last-child,
 /* line 122, node_modules/bootstrap/scss/_nav.scss */
 
 .nav-fill .nav-item .nav-link,
-.nav-fill .banner .nav li .nav-link,
-.banner .nav .nav-fill li .nav-link,
-.nav-fill .nav-item .banner .nav li,
-.banner .nav .nav-fill .nav-item li,
-.nav-fill .banner .nav li li,
-.banner .nav .nav-fill li li,
-.nav-justified .nav-item .nav-link,
-.nav-justified .banner .nav li .nav-link,
-.banner .nav .nav-justified li .nav-link,
-.nav-justified .nav-item .banner .nav li,
-.banner .nav .nav-justified .nav-item li,
-.nav-justified .banner .nav li li,
-.banner .nav .nav-justified li li {
+.nav-justified .nav-item .nav-link {
   width: 100%;
 }
 
@@ -17282,9 +17237,7 @@ fieldset:disabled .banner .nav a:last-child,
 
 /* line 82, node_modules/bootstrap/scss/_navbar.scss */
 
-.navbar-nav .nav-link,
-.navbar-nav .banner .nav li,
-.banner .nav .navbar-nav li {
+.navbar-nav .nav-link {
   padding-right: 0;
   padding-left: 0;
 }
@@ -17385,9 +17338,7 @@ fieldset:disabled .banner .nav a:last-child,
 
   /* line 178, node_modules/bootstrap/scss/_navbar.scss */
 
-  .navbar-expand-sm .navbar-nav .nav-link,
-  .navbar-expand-sm .navbar-nav .banner .nav li,
-  .banner .nav .navbar-expand-sm .navbar-nav li {
+  .navbar-expand-sm .navbar-nav .nav-link {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
   }
@@ -17473,9 +17424,7 @@ fieldset:disabled .banner .nav a:last-child,
 
   /* line 178, node_modules/bootstrap/scss/_navbar.scss */
 
-  .navbar-expand-md .navbar-nav .nav-link,
-  .navbar-expand-md .navbar-nav .banner .nav li,
-  .banner .nav .navbar-expand-md .navbar-nav li {
+  .navbar-expand-md .navbar-nav .nav-link {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
   }
@@ -17561,9 +17510,7 @@ fieldset:disabled .banner .nav a:last-child,
 
   /* line 178, node_modules/bootstrap/scss/_navbar.scss */
 
-  .navbar-expand-lg .navbar-nav .nav-link,
-  .navbar-expand-lg .navbar-nav .banner .nav li,
-  .banner .nav .navbar-expand-lg .navbar-nav li {
+  .navbar-expand-lg .navbar-nav .nav-link {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
   }
@@ -17649,9 +17596,7 @@ fieldset:disabled .banner .nav a:last-child,
 
   /* line 178, node_modules/bootstrap/scss/_navbar.scss */
 
-  .navbar-expand-xl .navbar-nav .nav-link,
-  .navbar-expand-xl .navbar-nav .banner .nav li,
-  .banner .nav .navbar-expand-xl .navbar-nav li {
+  .navbar-expand-xl .navbar-nav .nav-link {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
   }
@@ -17737,9 +17682,7 @@ fieldset:disabled .banner .nav a:last-child,
 
   /* line 178, node_modules/bootstrap/scss/_navbar.scss */
 
-  .navbar-expand-xxl .navbar-nav .nav-link,
-  .navbar-expand-xxl .navbar-nav .banner .nav li,
-  .banner .nav .navbar-expand-xxl .navbar-nav li {
+  .navbar-expand-xxl .navbar-nav .nav-link {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
   }
@@ -17824,9 +17767,7 @@ fieldset:disabled .banner .nav a:last-child,
 
 /* line 178, node_modules/bootstrap/scss/_navbar.scss */
 
-.navbar-expand .navbar-nav .nav-link,
-.navbar-expand .navbar-nav .banner .nav li,
-.banner .nav .navbar-expand .navbar-nav li {
+.navbar-expand .navbar-nav .nav-link {
   padding-right: 0.5rem;
   padding-left: 0.5rem;
 }
@@ -17904,39 +17845,27 @@ fieldset:disabled .banner .nav a:last-child,
 
 /* line 248, node_modules/bootstrap/scss/_navbar.scss */
 
-.navbar-light .navbar-nav .nav-link,
-.navbar-light .navbar-nav .banner .nav li,
-.banner .nav .navbar-light .navbar-nav li {
+.navbar-light .navbar-nav .nav-link {
   color: rgba(0, 0, 0, 0.55);
 }
 
 /* line 251, node_modules/bootstrap/scss/_navbar.scss */
 
 .navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .banner .nav li:hover,
-.banner .nav .navbar-light .navbar-nav li:hover,
-.navbar-light .navbar-nav .nav-link:focus,
-.navbar-light .navbar-nav .banner .nav li:focus,
-.banner .nav .navbar-light .navbar-nav li:focus {
+.navbar-light .navbar-nav .nav-link:focus {
   color: rgba(0, 0, 0, 0.7);
 }
 
 /* line 256, node_modules/bootstrap/scss/_navbar.scss */
 
-.navbar-light .navbar-nav .nav-link.disabled,
-.navbar-light .navbar-nav .banner .nav li.disabled,
-.banner .nav .navbar-light .navbar-nav li.disabled {
+.navbar-light .navbar-nav .nav-link.disabled {
   color: rgba(0, 0, 0, 0.3);
 }
 
 /* line 261, node_modules/bootstrap/scss/_navbar.scss */
 
 .navbar-light .navbar-nav .show > .nav-link,
-.navbar-light .navbar-nav .banner .nav .show > li,
-.banner .nav .navbar-light .navbar-nav .show > li,
-.navbar-light .navbar-nav .nav-link.active,
-.navbar-light .navbar-nav .banner .nav li.active,
-.banner .nav .navbar-light .navbar-nav li.active {
+.navbar-light .navbar-nav .nav-link.active {
   color: rgba(0, 0, 0, 0.9);
 }
 
@@ -17982,39 +17911,27 @@ fieldset:disabled .banner .nav a:last-child,
 
 /* line 299, node_modules/bootstrap/scss/_navbar.scss */
 
-.navbar-dark .navbar-nav .nav-link,
-.navbar-dark .navbar-nav .banner .nav li,
-.banner .nav .navbar-dark .navbar-nav li {
+.navbar-dark .navbar-nav .nav-link {
   color: rgba(255, 255, 255, 0.55);
 }
 
 /* line 302, node_modules/bootstrap/scss/_navbar.scss */
 
 .navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .banner .nav li:hover,
-.banner .nav .navbar-dark .navbar-nav li:hover,
-.navbar-dark .navbar-nav .nav-link:focus,
-.navbar-dark .navbar-nav .banner .nav li:focus,
-.banner .nav .navbar-dark .navbar-nav li:focus {
+.navbar-dark .navbar-nav .nav-link:focus {
   color: rgba(255, 255, 255, 0.75);
 }
 
 /* line 307, node_modules/bootstrap/scss/_navbar.scss */
 
-.navbar-dark .navbar-nav .nav-link.disabled,
-.navbar-dark .navbar-nav .banner .nav li.disabled,
-.banner .nav .navbar-dark .navbar-nav li.disabled {
+.navbar-dark .navbar-nav .nav-link.disabled {
   color: rgba(255, 255, 255, 0.25);
 }
 
 /* line 312, node_modules/bootstrap/scss/_navbar.scss */
 
 .navbar-dark .navbar-nav .show > .nav-link,
-.navbar-dark .navbar-nav .banner .nav .show > li,
-.banner .nav .navbar-dark .navbar-nav .show > li,
-.navbar-dark .navbar-nav .nav-link.active,
-.navbar-dark .navbar-nav .banner .nav li.active,
-.banner .nav .navbar-dark .navbar-nav li.active {
+.navbar-dark .navbar-nav .nav-link.active {
   color: #fff;
 }
 
@@ -29494,35 +29411,44 @@ h6,
   background: linear-gradient(149deg, #1a73e8 5.25%, #82e8ff 130.25%);
 }
 
-/* line 20, resources/assets/styles/components/_buttons.scss */
+@media (max-width: 575.98px) {
+  /* line 15, resources/assets/styles/components/_buttons.scss */
+
+  .btn-primary,
+  .banner .nav a:last-child {
+    padding: 18px 20px;
+  }
+}
+
+/* line 24, resources/assets/styles/components/_buttons.scss */
 
 .btn-primary:hover,
 .banner .nav a:hover:last-child {
   box-shadow: 0 0.375rem 1.5rem -0.25rem rgba(0, 0, 0, 0.15) !important;
 }
 
-/* line 29, resources/assets/styles/components/_buttons.scss */
+/* line 33, resources/assets/styles/components/_buttons.scss */
 
 .btn-white:hover {
   background: linear-gradient(149deg, #1a73e8 5.25%, #82e8ff 130.25%);
   box-shadow: 0 0.375rem 1.5rem -0.25rem rgba(0, 0, 0, 0.15) !important;
 }
 
-/* line 36, resources/assets/styles/components/_buttons.scss */
+/* line 40, resources/assets/styles/components/_buttons.scss */
 
 .btn-hover {
   box-sizing: border-box;
   box-shadow: inset 0 0 0 2px #1a73e8;
 }
 
-/* line 41, resources/assets/styles/components/_buttons.scss */
+/* line 45, resources/assets/styles/components/_buttons.scss */
 
 .btn-hover:hover {
   background: linear-gradient(149deg, #1a73e8 5.25%, #82e8ff 130.25%);
   box-shadow: 0 0.375rem 1.5rem -0.25rem rgba(0, 0, 0, 0.25) !important;
 }
 
-/* line 48, resources/assets/styles/components/_buttons.scss */
+/* line 52, resources/assets/styles/components/_buttons.scss */
 
 .btn:focus,
 .banner .nav a:focus:last-child,
@@ -29617,13 +29543,13 @@ form button[type="button"] {
 
 /** Text meant only for screen readers */
 
-/* line 23, resources/assets/styles/layouts/_header.scss */
+/* line 18, resources/assets/styles/layouts/_header.scss */
 
 .banner {
   z-index: 2;
 }
 
-/* line 31, resources/assets/styles/layouts/_header.scss */
+/* line 26, resources/assets/styles/layouts/_header.scss */
 
 .banner .brand img {
   max-width: 125px;
@@ -29631,14 +29557,14 @@ form button[type="button"] {
 }
 
 @media (min-width: 992px) {
-  /* line 31, resources/assets/styles/layouts/_header.scss */
+  /* line 26, resources/assets/styles/layouts/_header.scss */
 
   .banner .brand img {
     max-width: 155px;
   }
 }
 
-/* line 40, resources/assets/styles/layouts/_header.scss */
+/* line 35, resources/assets/styles/layouts/_header.scss */
 
 .banner .container-lg {
   min-height: 0;

@@ -1,7 +1,5 @@
 export default {
   init() {
-    $('[data-fancybox]').fancybox();
-
     jQuery('img.svg').each(function(){
       var $img = jQuery(this);
       var imgID = $img.attr('id');
@@ -32,57 +30,6 @@ export default {
         // Replace image with new SVG
         $img.replaceWith($svg);
       }, 'xml');
-    });
-
-    $('.slider-single').slick({
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: false,
-      infinite: true,
-    });
-
-    $('.slider-noticias').slick({
-      autoplay: true,
-      dots: false,
-      centerMode: false,
-      arrows: false,
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      infinite: false,
-      responsive: [
-        {
-          breakpoint: 1200,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        },
-        {
-          breakpoint: 992,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        },
-        {
-          breakpoint: 576,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            dots: true,
-          },
-        },
-      ],
     });
   },
   finalize() {
